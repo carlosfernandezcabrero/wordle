@@ -1,6 +1,6 @@
-import React from 'react'
+import type React from 'react'
 
-import { GameStatus } from '../types'
+import type { GameStatus } from '../types'
 
 import Letter from './Letter'
 

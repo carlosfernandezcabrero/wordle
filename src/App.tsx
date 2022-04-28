@@ -5,7 +5,7 @@ import Word from './components/Word'
 
 import GithubIcon from './icons/GithubIcon'
 
-import { GameStatus } from './types'
+import type { GameStatus } from './types'
 import { words } from './words'
 
 interface globalStateInterface {
