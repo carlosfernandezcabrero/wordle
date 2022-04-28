@@ -187,7 +187,11 @@ function App () {
 
       <footer className="font-extrabold text-gray-600 text-base text-center mt-16">
         <p className="mb-2">Made by Carlos Fernandez Cabrero</p>
-        <a href="#" target="_blank">
+        <a
+          href="https://github.com/carlosfernandezcabrero/wordle"
+          target="_blank"
+          rel="noreferrer"
+        >
           <GithubIcon />
         </a>
       </footer>
