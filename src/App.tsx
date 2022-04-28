@@ -194,9 +194,12 @@ function App () {
                   You win 🎉 !!
                 </p>
               )}
+              <p className="text-4xl mt-6 text-gray-600 tracking-tight font-normal">
+                The word was <span className="font-extrabold">{answer}</span>
+              </p>
 
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-2xl mt-10"
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-2xl mt-28"
                 onClick={() => resetGame()}
               >
                 Start again
