@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import Confetti from 'react-confetti'
 
 import Word from './components/Word'
 
@@ -41,8 +42,10 @@ const INITIAL_STATE: () => globalStateInterface = (): globalStateInterface => ({
 
 function App () {
   const [globalState, setGlobalState] = useState<globalStateInterface>(INITIAL_STATE)
-  console.log(globalState.answer)
+  const [confetti, setConfetti] = useState<boolean>(false)
+
   const { words, turn, answer, letter, status, isScoreTime, isGameOver } = globalState
+  const { innerHeight: viewportHeight, innerWidth: viewportWidth } = window
 
   const handleKeyDown = useCallback(
     ({ key, code }: KeyboardEvent) => {
@@ -62,8 +65,7 @@ function App () {
               ..._globalState,
               isScoreTime: true
             }))
-            const confetti = await import('canvas-confetti')
-            confetti.default()
+            setConfetti(true)
           }, WAIT_TIME)
 
           return
@@ -78,6 +80,7 @@ function App () {
               isGameOver: true
             }))
           }, WAIT_TIME)
+
           return
         }
 
@@ -130,9 +133,18 @@ function App () {
   )
 
   useEffect(() => {
-    globalThis.addEventListener('keydown', handleKeyDown)
-    return () => globalThis.removeEventListener('keydown', handleKeyDown)
+    const { addEventListener, removeEventListener } = globalThis
+
+    addEventListener('keydown', handleKeyDown)
+
+    return () => removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
+
+  useEffect(() => {
+    if (confetti) {
+      setTimeout(() => setConfetti(false), 7 * 1000)
+    }
+  }, [confetti])
 
   const resetGame: () => void = (): void => setGlobalState(INITIAL_STATE())
 
@@ -163,25 +175,34 @@ function App () {
         )}
 
         {isScoreTime && (
-          <div className="message text-center mt-36">
-            {isGameOver && (
-              <p className="text-7xl text-[#bb3429] font-bold tracking-tighter">
-                Game Over 😔 !!
-              </p>
-            )}
-            {!isGameOver && (
-              <p className="text-7xl text-[#6aaa64] font-bold tracking-tighter">
-                You win 🎉 !!
-              </p>
-            )}
+          <>
+            <Confetti
+              width={viewportWidth}
+              height={viewportHeight}
+              recycle={confetti}
+              numberOfPieces={350}
+            />
 
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded-sm text-2xl mt-10"
-              onClick={() => resetGame()}
-            >
-              Start again
-            </button>
-          </div>
+            <div className="message text-center mt-36">
+              {isGameOver && (
+                <p className="text-7xl text-[#bb3429] font-bold tracking-tighter">
+                  Game Over 😔 !!
+                </p>
+              )}
+              {!isGameOver && (
+                <p className="text-7xl text-[#6aaa64] font-bold tracking-tighter">
+                  You win 🎉 !!
+                </p>
+              )}
+
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-2xl mt-10"
+                onClick={() => resetGame()}
+              >
+                Start again
+              </button>
+            </div>
+          </>
         )}
       </main>
 
